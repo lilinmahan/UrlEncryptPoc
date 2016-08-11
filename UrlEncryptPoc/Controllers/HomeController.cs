@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using UrlEncryptPoc.Helper;
@@ -12,6 +13,15 @@ namespace UrlEncryptPoc.Controllers
     {
         public ActionResult Index()
         {
+            var ip= Request.UserHostAddress;
+            ViewBag.Message = ip;
+            ViewBag.MessageTest = Request.Browser.Browser+Request.Browser.Version;
+            IPAddress myIP = IPAddress.Parse(ip);
+            IPHostEntry GetIPHost = Dns.GetHostEntry(myIP);
+            List<string> compName = GetIPHost.HostName.Split('.').ToList();
+            ViewBag.MessageName = compName[0];
+            ViewBag.SessionId = System.Web.HttpContext.Current.Session.SessionID;
+
             return View();
         }
 
@@ -29,6 +39,7 @@ namespace UrlEncryptPoc.Controllers
             return View();
         }
 
+        [Throttle(Name = "Test",Milliseconds = 500)]
         [EncryptedActionParameter]
         public ActionResult TestPage(string testString, int testInt)
         {

@@ -20,7 +20,8 @@ namespace UrlEncryptPoc.Helper
             if (HttpContext.Current.Request.QueryString.Get("q") != null)
             {
                 string encryptedQueryString = HttpContext.Current.Request.QueryString.Get("q");
-                string decrptedString = Decrypt(encryptedQueryString.ToString());
+                //string decrptedString = Decrypt(encryptedQueryString.ToString());
+                string decrptedString = Decrypt(encryptedQueryString.ToString(), true);
                 string[] paramsArrs = decrptedString.Split('?');
                 var pars = filterContext.ActionDescriptor.GetParameters();
 
@@ -42,28 +43,28 @@ namespace UrlEncryptPoc.Helper
 
         private string Decrypt(string encryptedText)
         {
-            var test=Decrypt(encryptedText, true);
-            //var test=WebUtility.HtmlDecode(encryptedText);
-            //string key = "jdsg432387#";
-            //byte[] DecryptKey = { };
-            //byte[] IV = { 55, 34, 87, 64, 87, 195, 54, 21 };
-            //byte[] inputByte = new byte[encryptedText.Length];
+            //var test=Decrypt(encryptedText, true);
+            //var test = WebUtility.HtmlDecode(encryptedText);
+            string key = "jdsg432387#";
+            byte[] DecryptKey = { };
+            byte[] IV = { 55, 34, 87, 64, 87, 195, 54, 21 };
+            byte[] inputByte = new byte[encryptedText.Length];
 
-            //DecryptKey = System.Text.Encoding.UTF8.GetBytes(key.Substring(0, 8));
-            //DESCryptoServiceProvider des = new DESCryptoServiceProvider();
-            //inputByte = Convert.FromBase64String(encryptedText);
-            //MemoryStream ms = new MemoryStream();
-            //CryptoStream cs = new CryptoStream(ms, des.CreateDecryptor(DecryptKey, IV), CryptoStreamMode.Write);
-            //cs.Write(inputByte, 0, inputByte.Length);
-            //cs.FlushFinalBlock();
-            //System.Text.Encoding encoding = System.Text.Encoding.UTF8;
-            return test;
+            DecryptKey = System.Text.Encoding.UTF8.GetBytes(key.Substring(0, 8));
+            DESCryptoServiceProvider des = new DESCryptoServiceProvider();
+            inputByte = Convert.FromBase64String(encryptedText);
+            MemoryStream ms = new MemoryStream();
+            CryptoStream cs = new CryptoStream(ms, des.CreateDecryptor(DecryptKey, IV), CryptoStreamMode.Write);
+            cs.Write(inputByte, 0, inputByte.Length);
+            cs.FlushFinalBlock();
+            System.Text.Encoding encoding = System.Text.Encoding.UTF8;
+            return encoding.GetString(ms.ToArray());
         }
 
 
         public static string Decrypt(string cipherString, bool useHashing)
         {
-            string SecurityKey = "NsI8Xtc/YLSvpcwv076b9g==";
+            string SecurityKey = "@ZertyDds123";
             byte[] keyArray;
             //get the byte code of the string
 

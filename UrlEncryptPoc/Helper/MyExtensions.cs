@@ -70,7 +70,8 @@ namespace UrlEncryptPoc.Helper
             }
             if (queryString != string.Empty)
             {
-                ancor.Append("?q=" + Encrypt(queryString));
+                //ancor.Append("?q=" + Encrypt(queryString));
+                ancor.Append("?q=" + Encrypt(queryString, true));
             }
             ancor.Append("'");
             ancor.Append(">");
@@ -82,26 +83,26 @@ namespace UrlEncryptPoc.Helper
         private static string Encrypt(string plainText)
         {
             string key = "jdsg432387#";
-           
-            var test =Encrypt(plainText, true);
-            //byte[] EncryptKey = { };
-            //byte[] IV = { 55, 34, 87, 64, 87, 195, 54, 21 };
-            //EncryptKey = System.Text.Encoding.UTF8.GetBytes(key.Substring(0, 8));
-            //DESCryptoServiceProvider des = new DESCryptoServiceProvider();
-            //byte[] inputByte = Encoding.UTF8.GetBytes(plainText);
-            //MemoryStream mStream = new MemoryStream();
-            //CryptoStream cStream = new CryptoStream(mStream, des.CreateEncryptor(EncryptKey, IV), CryptoStreamMode.Write);
-            //cStream.Write(inputByte, 0, inputByte.Length);
-            //cStream.FlushFinalBlock();
-            //var test= Convert.ToBase64String(mStream.ToArray());
 
-            return Uri.EscapeUriString(test);
+            //var test =Encrypt(plainText, true);
+            byte[] EncryptKey = { };
+            byte[] IV = { 55, 34, 87, 64, 87, 195, 54, 21 };
+            EncryptKey = System.Text.Encoding.UTF8.GetBytes(key.Substring(0, 8));
+            DESCryptoServiceProvider des = new DESCryptoServiceProvider();
+            byte[] inputByte = Encoding.UTF8.GetBytes(plainText);
+            MemoryStream mStream = new MemoryStream();
+            CryptoStream cStream = new CryptoStream(mStream, des.CreateEncryptor(EncryptKey, IV), CryptoStreamMode.Write);
+            cStream.Write(inputByte, 0, inputByte.Length);
+            cStream.FlushFinalBlock();
+            var test = Convert.ToBase64String(mStream.ToArray());
+
+            return Uri.EscapeDataString(test);
         }
 
 
         public static string Encrypt(string toEncrypt, bool useHashing)
         {
-            string SecurityKey = "NsI8Xtc/YLSvpcwv076b9g==";
+            string SecurityKey = "@ZertyDds123";
             byte[] keyArray;
             byte[] toEncryptArray = UTF8Encoding.UTF8.GetBytes(toEncrypt);
 
@@ -136,7 +137,8 @@ namespace UrlEncryptPoc.Helper
             //Release resources held by TripleDes Encryptor
             tdes.Clear();
             //Return the encrypted data into unreadable string format
-            return Convert.ToBase64String(resultArray, 0, resultArray.Length);
+            var test= Convert.ToBase64String(resultArray, 0, resultArray.Length);
+            return System.Uri.EscapeDataString(test);
         }
     }
 
